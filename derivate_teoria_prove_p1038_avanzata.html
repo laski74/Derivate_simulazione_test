@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Derivate - versione avanzata test</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{--ink:#2f3542;--muted:#6b7480;--line:#d9ddea;--accent:#6ea8fe;--shadow:0 10px 28px rgba(77,92,122,.12);--radius:22px}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:"Trebuchet MS","Verdana",sans-serif;color:var(--ink);background:radial-gradient(circle at top left,#fff7e8 0,transparent 28%),radial-gradient(circle at top right,#eef6ff 0,transparent 25%),linear-gradient(180deg,#f7fbff 0%,#f8f5ff 100%)}
+.topbar{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(255,255,255,.82);border-bottom:1px solid rgba(217,221,234,.9);padding:10px 16px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800}.brand-badge{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#bdb2ff);color:white;display:grid;place-items:center;box-shadow:var(--shadow);font-size:20px}
+.tab-buttons{display:flex;gap:10px;flex-wrap:wrap}.tab-btn{border:none;cursor:pointer;padding:11px 16px;border-radius:999px;background:#eef2ff;color:#334155;font-weight:700;box-shadow:var(--shadow)}.tab-btn.active{background:linear-gradient(135deg,var(--accent),#86efac);color:#163047}
+.layout{display:none;min-height:calc(100vh - 68px)} .layout.active{display:grid}.theory-layout{grid-template-columns:290px minmax(0,1fr)} .exercise-layout{grid-template-columns:minmax(0,1fr) 260px}
+.side{background:rgba(255,255,255,.7);border-right:1px solid var(--line);padding:20px 14px 24px;position:sticky;top:68px;align-self:start;height:calc(100vh - 68px);overflow:auto}.side.right{border-right:none;border-left:1px solid var(--line)}
+.side h3{margin:8px 10px 16px;font-size:1.05rem}.menu-btn{width:100%;text-align:left;border:none;cursor:pointer;background:#fffdf9;margin:8px 0;padding:12px 14px;border-radius:18px;box-shadow:var(--shadow);color:var(--ink);font-weight:700;border:1px solid rgba(217,221,234,.8)}.menu-btn small{display:block;font-weight:500;color:var(--muted);margin-top:4px}
+main{padding:22px;min-width:0}.hero{background:linear-gradient(135deg,#fff5da,#f2fbff);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px}.card{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px}
+.exercise-card{background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(250,252,255,.95));border:1px solid var(--line);border-radius:26px;padding:18px;box-shadow:var(--shadow);margin-bottom:18px}.exercise-title{margin:0 0 12px;font-size:1.2rem}.quote{font-style:italic;color:#5f6875;background:#f8fbff;padding:10px 12px;border-radius:14px;border-left:4px solid var(--accent)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.action-btn{border:none;border-radius:16px;padding:10px 14px;cursor:pointer;font-weight:800;box-shadow:var(--shadow);color:#27364c;background:#eef2ff}.action-btn.hint{background:#fff3cd}.action-btn.solution{background:#d9f7e8}.action-btn.test{background:#e9ddff}
+.hidden-panel{display:none;margin-top:10px}.hidden-panel.visible{display:block}
+input[type="password"],textarea{padding:10px 12px;border-radius:14px;border:1px solid #cfd7e6;font-size:1rem;width:100%} textarea{min-height:90px;resize:vertical}
+.exercise-image{max-width:100%;width:420px;border-radius:18px;border:1px solid #d9ddea;background:white;padding:8px;box-shadow:var(--shadow);display:block;margin:10px auto}
+.result-good{color:#027a48;font-weight:700}.result-bad{color:#b42318;font-weight:700}.score-box{position:sticky;top:80px}.small{font-size:.92rem;color:var(--muted)}
+@media (max-width:980px){.theory-layout,.exercise-layout{grid-template-columns:1fr}.side,.side.right{position:relative;top:0;height:auto;border-right:none;border-left:none;border-bottom:1px solid var(--line)} main{padding:16px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><div class="brand-badge">∂</div><div><div>Derivate - versione avanzata test</div><div class="small">soluzioni protette + modalità test con punteggio</div></div></div>
+  <div class="tab-buttons">
+    <button class="tab-btn active" data-tab="theoryTab" type="button">📚 Teoria</button>
+    <button class="tab-btn" data-tab="exerciseTab" type="button">🧩 Prove A e B</button>
+  </div>
+</div>
+
+<section id="theoryTab" class="layout theory-layout active">
+  <aside class="side">
+    <h3>🧭 Menù teoria</h3>
+    <button class="menu-btn" data-scroll="#sec-1" type="button">1. Definizione</button>
+    <button class="menu-btn" data-scroll="#sec-2" type="button">2. Derivate fondamentali</button>
+    <button class="menu-btn" data-scroll="#sec-3" type="button">3. Regole di calcolo</button>
+    <button class="menu-btn" data-scroll="#sec-4" type="button">4. Funzione composta</button>
+    <button class="menu-btn" data-scroll="#sec-5" type="button">5. Tangente</button>
+  </aside>
+  <main>
+    <div class="hero"><h1>Ripasso teorico</h1><p>Schema essenziale e ordinato per accompagnare la simulazione.</p></div>
+    <section id="sec-1" class="card"><h2>1. Definizione</h2><p>$$f'(x_0)=\lim_{h\to 0}\frac{f(x_0+h)-f(x_0)}{h}$$</p></section>
+    <section id="sec-2" class="card"><h2>2. Derivate fondamentali</h2><p>$$(x^n)'=nx^{n-1},\quad (e^x)'=e^x,\quad (\ln x)'=1/x$$</p></section>
+    <section id="sec-3" class="card"><h2>3. Regole di calcolo</h2><p>$$(f+g)'=f'+g',\quad (fg)'=f'g+fg',\quad \left(\frac fg\right)'=\frac{f'g-fg'}{g^2}$$</p></section>
+    <section id="sec-4" class="card"><h2>4. Funzione composta</h2><p>$$[f(g(x))]'=f'(g(x))\cdot g'(x)$$</p></section>
+    <section id="sec-5" class="card"><h2>5. Tangente</h2><p>$$y-f(x_0)=f'(x_0)(x-x_0)$$</p></section>
+  </main>
+</section>
+
+<section id="exerciseTab" class="layout exercise-layout">
+  <main>
+    <div class="hero">
+      <h1>Prove A e B</h1>
+      <p>Le soluzioni complete sono protette da password. La modalità test nasconde le soluzioni e permette l'autovalutazione con punteggio.</p>
+      <div class="card">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <input type="password" id="global-password" placeholder="Inserisci la password per sbloccare le soluzioni" style="max-width:360px">
+          <button class="action-btn solution" type="button" onclick="unlockSolutions()">Sblocca soluzioni</button>
+          <button class="action-btn test" type="button" onclick="toggleTestMode()">Modalità test</button>
+          <button class="action-btn" type="button" onclick="finishTest()">Calcola punteggio</button>
+        </div>
+        <p id="global-msg" class="small"></p>
+      </div>
+    </div>
+    <div id="exerciseContainer"></div>
+  </main>
+  <aside class="side right">
+    <div class="score-box">
+      <h3>📌 Menù prove</h3>
+      <button class="menu-btn" onclick="renderExam('A')" type="button">Prova A<small>5 esercizi</small></button>
+      <button class="menu-btn" onclick="renderExam('B')" type="button">Prova B<small>5 esercizi</small></button>
+      <div class="card">
+        <h4 style="margin-top:0">🧪 Stato test</h4>
+        <p id="test-status" class="small">Modalità test disattivata.</p>
+        <p id="test-score" class="small"></p>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<script>
+const examData = {"A": {"title": "Prova A", "intro": "Allenamento su definizione di derivata, derivate fondamentali, lettura del grafico e tangenti.", "exercises": [{"id": "A1", "title": "1. Derivata attraverso la definizione", "score": 2, "text": "Calcola attraverso la definizione la derivata della funzione $f(x)=x^3-2x$ nel punto $x=2$.", "image": "", "hint": "Scrivi il rapporto incrementale nel punto $x_0=2$ e sviluppa $(2+h)^3$.", "answer": "10", "solution": "Il risultato è $$f'(2)=10.$$", "steps": ["Calcola $f(2+h)$.", "Calcola $f(2)$.", "Forma il rapporto incrementale.", "Semplifica.", "Passa al limite."]}, {"id": "A2", "title": "2. Calcolo di derivate", "score": 4, "text": "Calcola le derivate delle seguenti funzioni:<br>a) $y=-x^3+4x^2+x$<br>b) $y=\\dfrac{3}{x}$<br>c) $y=e^{x^2}$<br>d) $y=(\\ln x)^2$<br>e) $y=\\sqrt{x^2+1}$", "image": "", "hint": "Riconosci la struttura di ogni funzione e applica la regola giusta.", "answer": "a:-3x^2+8x+1; b:-3/x^2; c:2xe^(x^2); d:2ln(x)/x; e:x/sqrt(x^2+1)", "solution": "<br>a) $y'=-3x^2+8x+1$<br>b) $y'=-\\dfrac{3}{x^2}$<br>c) $y'=2xe^{x^2}$<br>d) $y'=\\dfrac{2\\ln x}{x}$<br>e) $y'=\\dfrac{x}{\\sqrt{x^2+1}}$", "steps": ["Per a) deriva termine per termine.", "Per b) riscrivi $3/x$ come $3x^{-1}$.", "Per c), d), e) usa la regola della catena."]}, {"id": "A3", "title": "3. Lettura del grafico della funzione", "score": 4, "text": "Osserva il grafico della funzione $f(x)$.<br>a) Individua gli zeri della funzione.<br>b) Indica le coordinate approssimate del massimo $V_1$ e del minimo $V_2$.<br>c) Stabilisci in quali intervalli la funzione è crescente e in quali è decrescente.<br>d) Deduci il segno di $f'(x)$ nei vari intervalli e indica i punti in cui $f'(x)=0$.", "image": "assets/esercizio3_provaA.png", "hint": "Leggi zeri, massimo, minimo, crescita e decrescita direttamente dal grafico.", "answer": "zeri:0,4,6; max:(2,4); min:(5,-1); crescente:x<2 e x>5; decrescente:2<x<5; f'(2)=0; f'(5)=0", "solution": "• zeri in $x=0,4,6$<br>• $V_1\\approx(2,4)$<br>• $V_2\\approx(5,-1)$<br>• crescente per $x<2$ e $x>5$<br>• decrescente per $2<x<5$<br>• $$f'(2)=0,\\ f'(5)=0$$", "steps": ["Leggi gli zeri dal grafico.", "Leggi massimo e minimo.", "Determina dove la curva cresce e dove decresce.", "Collega crescita/decrescita al segno della derivata."]}, {"id": "A4", "title": "4. Retta tangente alla curva $y=3x^4$", "score": 3, "text": "Data la curva $y=3x^4$, determina l’equazione della retta tangente nel punto di ascissa $1$ e stabilisci se ci sono punti della curva con tangente parallela alla precedente.", "image": "", "hint": "Trova $f'(x)$, poi usa $x=1$ e infine imponi la stessa derivata.", "answer": "y=12x-9; nessun altro punto reale", "solution": "$$f'(x)=12x^3$$, quindi in $x=1$ la tangente è $$y=12x-9$$. Non ci sono altri punti reali con tangente parallela.", "steps": ["Deriva la funzione.", "Calcola punto e coefficiente angolare in $x=1$.", "Scrivi la tangente.", "Imponi $12x^3=12$ per cercare tangenti parallele."]}, {"id": "A5", "title": "5. Determinazione dei parametri", "score": 3, "text": "Determina $a$ e $b$ in modo che $f(x)=ax^4+x^3+bx$ abbia per tangente la retta $y=4x-5$ nel punto di ascissa $1$.", "image": "", "hint": "Usa che la tangente deve avere stesso punto e stessa pendenza.", "answer": "a=1; b=-3", "solution": "Si ottiene il sistema $$a+b=-2,\\quad 4a+b=1$$ da cui $$a=1,\\ b=-3$$.", "steps": ["Imponi $f(1)=-1$.", "Imponi $f'(1)=4$.", "Risolvi il sistema nelle incognite $a,b$."]}]}, "B": {"title": "Prova B", "intro": "Allenamento su tangente, legge oraria, regole di derivazione e problemi sintetici.", "exercises": [{"id": "B1", "title": "1. Tangente alla curva $y=e^{x+1}$", "score": 2, "text": "Determina l'equazione della retta tangente alla curva $y=e^{x+1}$ nel suo punto di intersezione con l’asse $y$.", "image": "", "hint": "L’intersezione con l’asse $y$ si trova per $x=0$.", "answer": "y=ex+e", "solution": "Nel punto $(0,e)$ la derivata vale $e$, quindi la tangente è $$y=ex+e$$.", "steps": ["Trova il punto con $x=0$.", "Calcola la derivata.", "Usa la formula della tangente."]}, {"id": "B2", "title": "2. Legge oraria, velocità e accelerazione", "score": 4, "text": "La legge oraria è $$s(t)=t^4-3t^3+8t+5$$.<br>a) Determina velocità e accelerazione.<br>b) In quale istante la velocità è $3$ m/s?", "image": "", "hint": "Ricorda: $v(t)=s'(t)$ e $a(t)=s''(t)$.", "answer": "v=4t^3-9t^2+8; a=12t^2-18t; t=1", "solution": "$$v(t)=4t^3-9t^2+8,\\quad a(t)=12t^2-18t$$ e un istante in cui $v(t)=3$ è $$t=1$$.", "steps": ["Deriva una prima volta per trovare la velocità.", "Deriva una seconda volta per trovare l’accelerazione.", "Imponi $v(t)=3$."]}, {"id": "B3", "title": "3. Calcolo di derivate", "score": 4, "text": "Calcola le derivate:<br>a) $y=\\dfrac{4x^3+x}{1+2x^2}$<br>b) $y=2\\sqrt{1-x}$<br>c) $y=\\dfrac{1+\\cos x}{\\cos x}$<br>d) $y=x\\ln x$", "image": "", "hint": "Usa quoziente, catena, semplificazione algebrica e prodotto.", "answer": "a:((12x^2+1)(1+2x^2)-(4x^3+x)4x)/(1+2x^2)^2; b:-1/sqrt(1-x); c:sin(x)/cos(x)^2; d:ln(x)+1", "solution": "<br>a) $$y'=\\frac{(12x^2+1)(1+2x^2)-(4x^3+x)(4x)}{(1+2x^2)^2}$$<br>b) $$y'=-\\frac{1}{\\sqrt{1-x}}$$<br>c) $$y'=\\frac{\\sin x}{\\cos^2 x}$$<br>d) $$y'=\\ln x+1$$", "steps": ["Per a) usa il quoziente.", "Per b) usa la catena.", "Per c) puoi semplificare prima.", "Per d) usa il prodotto."]}, {"id": "B4", "title": "4. Parametri con tangente assegnata", "score": 3, "text": "Trova $a,b,c$ per $f(x)=ax^2+bx+c$ sapendo che $y=2x+1$ è tangente nel punto di ascissa $1$ e che il grafico passa per l'origine.", "image": "", "hint": "Usa le condizioni $f(0)=0$, $f(1)=3$, $f'(1)=2$.", "answer": "a=-1; b=4; c=0", "solution": "Dalle condizioni si ottiene $$c=0,\\ a+b=3,\\ 2a+b=2$$ e quindi $$a=-1,\\ b=4,\\ c=0$$.", "steps": ["Imponi il passaggio per l’origine.", "Imponi il punto di tangenza.", "Imponi il coefficiente angolare della tangente.", "Risolvi il sistema."]}, {"id": "B5", "title": "5. Mini-problema di verifica finale", "score": 3, "text": "Per la funzione $$f(x)=x^2e^x$$<br>a) calcola la derivata;<br>b) scrivi l’equazione della tangente nel punto di ascissa $0$.", "image": "", "hint": "Usa la regola del prodotto e poi valuta in $x=0$.", "answer": "f'(x)=e^x(x^2+2x); y=0", "solution": "$$f'(x)=2xe^x+x^2e^x=e^x(x^2+2x)$$ e nel punto $x=0$ la tangente è $$y=0$$.", "steps": ["Applica la regola del prodotto.", "Valuta funzione e derivata in $x=0$.", "Scrivi la tangente."]}]}};
+let currentExam = 'A';
+let unlocked = false;
+let testMode = false;
+const answersState = {};
+
+document.querySelectorAll('.menu-btn[data-scroll]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const el = document.querySelector(btn.dataset.scroll);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.layout').forEach(l => l.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    if (window.MathJax) MathJax.typesetPromise();
+  });
+});
+
+function normalize(str){
+  return (str || '')
+    .toLowerCase()
+    .replace(/<[^>]*>/g,' ')
+    .replace(/\s+/g,'')
+    .replace(/,/g,'.')
+    .replace(/−/g,'-')
+    .replace(/\*/g,'');
+}
+
+function isCorrect(user, expected){
+  const u = normalize(user);
+  const e = normalize(expected);
+  if (!u) return false;
+  if (u === e) return true;
+  return e.split(';').every(part => u.includes(normalize(part)));
+}
+
+async function readPassword(){
+  try{
+    const res = await fetch('password_derivate.txt');
+    if(res.ok){
+      const txt = (await res.text()).trim();
+      if(txt) return txt;
+    }
+  }catch(e){}
+  return 'derivatasegreta2026';
+}
+
+async function unlockSolutions(){
+  const pwd = document.getElementById('global-password').value.trim();
+  const truePwd = await readPassword();
+  const msg = document.getElementById('global-msg');
+  if(pwd !== truePwd){
+    msg.textContent = 'Password non corretta.';
+    msg.className = 'small result-bad';
+    return;
+  }
+  unlocked = true;
+  msg.textContent = 'Soluzioni sbloccate.';
+  msg.className = 'small result-good';
+  renderExam(currentExam);
+}
+
+function togglePanel(id, kind){
+  const p = document.getElementById(id + '-' + kind);
+  if(!p) return;
+  p.classList.toggle('visible');
+  if(window.MathJax) MathJax.typesetPromise([p]);
+}
+
+function renderExam(key){
+  currentExam = key;
+  const exam = examData[key];
+  const box = document.getElementById('exerciseContainer');
+  let html = '<section class="card"><h2 style="margin-top:0">' + exam.title + '</h2><p class="small">' + exam.intro + '</p></section>';
+  exam.exercises.forEach(ex => { html += renderExercise(ex); });
+  box.innerHTML = html;
+  updateStatus();
+  if(window.MathJax) MathJax.typesetPromise([box]);
+}
+
+function renderExercise(ex){
+  const img = ex.image ? '<img src="' + ex.image + '" class="exercise-image" alt="immagine esercizio">' : '';
+  const saved = answersState[ex.id] && answersState[ex.id].user ? answersState[ex.id].user : '';
+  const checked = answersState[ex.id] && answersState[ex.id].checked;
+  const correct = answersState[ex.id] && answersState[ex.id].correct;
+  const result = checked ? '<p class="' + (correct ? 'result-good' : 'result-bad') + '">' + (correct ? 'Risposta corretta' : 'Risposta da rivedere') + '</p>' : '';
+  let solutionBlock = '';
+  if(!testMode && unlocked){
+    let steps = '';
+    ex.steps.forEach((s,i) => { steps += '<div style="margin-bottom:8px"><strong>Passaggio ' + (i+1) + '</strong>: ' + s + '</div>'; });
+    solutionBlock = '<button class="action-btn solution" type="button" onclick="togglePanel(\'' + ex.id + '\',\'solution\')">🔐 Soluzione completa</button>' +
+      '<div id="' + ex.id + '-solution" class="hidden-panel card"><h4 style="margin-top:0">Soluzione completa</h4><div>' + ex.solution + '</div><hr>' + steps + '</div>';
+  }
+  let testBlock = '';
+  if(testMode){
+    testBlock = '<div class="card"><h4 style="margin-top:0">Modalità test</h4><p class="small">Scrivi il risultato finale o gli elementi essenziali della risposta. Le soluzioni restano nascoste.</p><textarea id="ans-' + ex.id + '" placeholder="Inserisci qui la tua risposta...">' + saved + '</textarea><div class="btn-row"><button class="action-btn test" type="button" onclick="checkAnswer(\'' + ex.id + '\')">Verifica</button><button class="action-btn" type="button" onclick="clearAnswer(\'' + ex.id + '\')">Cancella</button></div><div id="res-' + ex.id + '">' + result + '</div></div>';
+  }
+  return '<article class="exercise-card"><h3 class="exercise-title">' + ex.title + ' <span class="small">(' + ex.score + ' punti)</span></h3><div class="quote">' + ex.text + '</div>' + img + '<div class="btn-row"><button class="action-btn hint" type="button" onclick="togglePanel(\'' + ex.id + '\',\'hint\')">💡 Suggerimento</button>' + solutionBlock + '</div><div id="' + ex.id + '-hint" class="hidden-panel card">' + ex.hint + '</div>' + testBlock + '</article>';
+}
+
+function checkAnswer(id){
+  const ex = examData[currentExam].exercises.find(e => e.id === id);
+  const val = document.getElementById('ans-' + id).value;
+  const ok = isCorrect(val, ex.answer);
+  answersState[id] = {user: val, checked: true, correct: ok};
+  renderExam(currentExam);
+}
+
+function clearAnswer(id){
+  answersState[id] = {user:'', checked:false, correct:false};
+  renderExam(currentExam);
+}
+
+function toggleTestMode(){
+  testMode = !testMode;
+  renderExam(currentExam);
+}
+
+function finishTest(){
+  if(!testMode){
+    document.getElementById('test-status').textContent = 'Attiva prima la modalità test.';
+    return;
+  }
+  const exam = examData[currentExam];
+  let earned = 0, total = 0;
+  exam.exercises.forEach(ex => {
+    total += ex.score;
+    if(answersState[ex.id] && answersState[ex.id].correct) earned += ex.score;
+  });
+  const perc = total ? Math.round(earned * 100 / total) : 0;
+  let advice = 'Ripassa in modo mirato gli esercizi non corretti.';
+  if(perc >= 85) advice = 'Ottimo lavoro. Puoi passare ad esercizi più complessi.';
+  else if(perc >= 65) advice = 'Buon livello. Ripassa solo i punti ancora incerti.';
+  else if(perc >= 40) advice = 'Serve un ripasso delle regole di derivazione e delle tangenti.';
+  else advice = 'Conviene riprendere la teoria di base e rifare gli esercizi guidati.';
+  document.getElementById('test-score').innerHTML = 'Punteggio: <strong>' + earned + ' / ' + total + '</strong> (' + perc + '%)<br>' + advice;
+  updateStatus();
+}
+
+function updateStatus(){
+  const exam = examData[currentExam];
+  let checked = 0;
+  exam.exercises.forEach(ex => { if(answersState[ex.id] && answersState[ex.id].checked) checked++; });
+  document.getElementById('test-status').textContent = testMode
+    ? 'Modalità test attiva. Risposte verificate: ' + checked + ' / ' + exam.exercises.length + '.'
+    : 'Modalità test disattivata.';
+  if(!testMode) document.getElementById('test-score').textContent = '';
+}
+
+renderExam('A');
+if(window.MathJax) MathJax.typesetPromise();
+</script>
+</body>
+</html>
