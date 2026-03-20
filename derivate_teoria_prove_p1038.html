@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Derivate - Teoria e prove A/B pag. 1038</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{
+  --ink:#2f3542; --muted:#6b7480; --line:#d9ddea; --accent:#6ea8fe;
+  --shadow:0 10px 28px rgba(77,92,122,.12); --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; font-family:"Trebuchet MS","Verdana",sans-serif; color:var(--ink);
+  background:
+    radial-gradient(circle at top left,#fff7e8 0,transparent 28%),
+    radial-gradient(circle at top right,#eef6ff 0,transparent 25%),
+    linear-gradient(180deg,#f7fbff 0%,#f8f5ff 100%);
+}
+.topbar{
+  position:sticky; top:0; z-index:10; backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.82); border-bottom:1px solid rgba(217,221,234,.9);
+  padding:10px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between;
+}
+.brand{display:flex; align-items:center; gap:12px; font-weight:800;}
+.brand-badge{
+  width:42px; height:42px; border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),#bdb2ff);
+  color:white; display:grid; place-items:center; box-shadow:var(--shadow); font-size:20px;
+}
+.tab-buttons{display:flex; gap:10px; flex-wrap:wrap;}
+.tab-btn{
+  border:none; cursor:pointer; padding:11px 16px; border-radius:999px;
+  background:#eef2ff; color:#334155; font-weight:700; box-shadow:var(--shadow);
+}
+.tab-btn.active{background:linear-gradient(135deg,var(--accent),#86efac); color:#163047;}
+.layout{display:none; min-height:calc(100vh - 68px);}
+.layout.active{display:grid;}
+.theory-layout{grid-template-columns:290px minmax(0,1fr);}
+.exercise-layout{grid-template-columns:minmax(0,1fr) 240px;}
+.side{
+  background:rgba(255,255,255,.7); border-right:1px solid var(--line);
+  padding:20px 14px 24px; position:sticky; top:68px; align-self:start;
+  height:calc(100vh - 68px); overflow:auto;
+}
+.side.right{border-right:none; border-left:1px solid var(--line);}
+.side h3{margin:8px 10px 16px; font-size:1.05rem; display:flex; align-items:center; gap:8px;}
+.menu-btn{
+  width:100%; text-align:left; border:none; cursor:pointer; background:#fffdf9;
+  margin:8px 0; padding:12px 14px; border-radius:18px; box-shadow:var(--shadow);
+  color:var(--ink); font-weight:700; border:1px solid rgba(217,221,234,.8);
+}
+.menu-btn small{display:block; font-weight:500; color:var(--muted); margin-top:4px;}
+main{padding:22px; min-width:0;}
+.hero{
+  background:linear-gradient(135deg,#fff5da,#f2fbff);
+  border:1px solid var(--line); border-radius:28px; padding:22px;
+  box-shadow:var(--shadow); margin-bottom:18px;
+}
+.hero h1{margin:0 0 8px; font-size:1.8rem;}
+.hero p{margin:6px 0; color:var(--muted); line-height:1.55;}
+.card{
+  background:rgba(255,255,255,.9); border:1px solid var(--line);
+  border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; margin-bottom:18px;
+}
+.section-title{margin:0 0 12px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.pill{
+  padding:6px 10px; border-radius:999px; font-size:.85rem; font-weight:800;
+  background:#eef6ff; color:#1d4f91;
+}
+table{
+  width:100%; border-collapse:collapse; margin-top:12px; border-radius:18px;
+  font-size:.98rem; overflow:hidden;
+}
+th,td{border:1px solid #dfe4ef; padding:11px 12px; vertical-align:top;}
+th{background:#eef6ff;}
+.speech{
+  background:linear-gradient(135deg,#fff9ef,#f5fffa); border:2px solid #e9dec8;
+  border-radius:20px; padding:14px 16px; position:relative; margin:12px 0;
+}
+.exercise-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(250,252,255,.95));
+  border:1px solid var(--line); border-radius:26px; padding:18px;
+  box-shadow:var(--shadow); margin-bottom:18px;
+}
+.exercise-header{
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:14px; flex-wrap:wrap; margin-bottom:12px;
+}
+.exercise-title{margin:0; font-size:1.2rem;}
+.score-badge{
+  background:#eef9f1; color:#1b6f39; padding:8px 12px; border-radius:999px;
+  font-weight:800; border:1px solid #cfead8;
+}
+.btn-row{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0;}
+.action-btn{
+  border:none; border-radius:16px; padding:10px 14px; cursor:pointer;
+  font-weight:800; box-shadow:var(--shadow); color:#27364c; background:#eef2ff;
+}
+.action-btn.hint{background:#fff3cd;}
+.action-btn.solution{background:#d9f7e8;}
+.action-btn.unlock{background:#ffe0eb;}
+.hidden-panel{display:none; margin-top:10px;}
+.hidden-panel.visible{display:block;}
+.input-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:8px;}
+input[type="password"]{
+  padding:10px 12px; border-radius:14px; border:1px solid #cfd7e6;
+  min-width:240px; font-size:1rem;
+}
+.step-box{
+  background:#fcfffd; border:1px dashed #cfe5d7; border-radius:18px; padding:14px; margin-top:10px;
+}
+.step-item{
+  padding:10px 12px; border-radius:14px; background:#ffffff;
+  border:1px solid #dfe7f3; margin-bottom:10px;
+}
+.step-item.current{background:#eef8ff; border-color:#b7daf6;}
+.step-controls{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+.step-controls button{
+  border:none; cursor:pointer; padding:9px 13px; border-radius:14px;
+  font-weight:800; background:#ebf7ff; box-shadow:var(--shadow);
+}
+.step-progress{margin-top:8px; color:var(--muted); font-size:.95rem;}
+.quote{
+  font-style:italic; color:#5f6875; background:#f8fbff;
+  padding:10px 12px; border-radius:14px; border-left:4px solid var(--accent);
+}
+.exercise-image{
+  max-width:100%; width:420px; border-radius:18px; border:1px solid #d9ddea;
+  background:white; padding:8px; box-shadow:var(--shadow); display:block; margin:10px auto;
+}
+.note{font-size:.95rem; color:var(--muted);}
+@media (max-width:980px){
+  .theory-layout,.exercise-layout{grid-template-columns:1fr;}
+  .side,.side.right{
+    position:relative; top:0; height:auto; border-right:none; border-left:none; border-bottom:1px solid var(--line);
+  }
+  main{padding:16px;}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-badge">∂</div>
+    <div>
+      <div>Derivate - teoria + prove A/B</div>
+      <div style="font-size:.88rem;color:#677281;">ripasso guidato in stile fumettistico</div>
+    </div>
+  </div>
+  <div class="tab-buttons">
+    <button class="tab-btn active" data-tab="theoryTab" type="button">📚 Teoria</button>
+    <button class="tab-btn" data-tab="exerciseTab" type="button">🧩 Prove A e B</button>
+  </div>
+</div>
+
+<section id="theoryTab" class="layout theory-layout active">
+  <aside class="side">
+    <h3>🧭 Menù teoria</h3>
+    <button class="menu-btn" data-scroll="#sec-1" type="button">1. Derivata di una funzione<small>rapporto incrementale e significato</small></button>
+    <button class="menu-btn" data-scroll="#sec-2" type="button">2. Derivate fondamentali<small>formulario essenziale</small></button>
+    <button class="menu-btn" data-scroll="#sec-3" type="button">3. Operazioni con le derivate<small>somma, prodotto, quoziente</small></button>
+    <button class="menu-btn" data-scroll="#sec-4" type="button">4. Funzione composta<small>regola della catena</small></button>
+    <button class="menu-btn" data-scroll="#sec-5" type="button">5. Funzione inversa<small>formula della derivata</small></button>
+    <button class="menu-btn" data-scroll="#sec-6" type="button">6. Ordine superiore<small>seconda derivata e oltre</small></button>
+    <button class="menu-btn" data-scroll="#sec-7" type="button">7. Retta tangente<small>equazione e uso</small></button>
+    <button class="menu-btn" data-scroll="#sec-8" type="button">8. Punti di non derivabilità<small>angolo, cuspide, tangente verticale</small></button>
+    <button class="menu-btn" data-scroll="#sec-9" type="button">9. Velocità di variazione<small>interpretazione fisica</small></button>
+    <button class="menu-btn" data-scroll="#sec-10" type="button">10. Differenziale<small>approssimazione lineare</small></button>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <h1>Capitolo 18 - Derivate</h1>
+      <p>Ripasso ordinato di definizione, regole di calcolo, funzione composta, funzione inversa, tangente, punti di non derivabilità, velocità di variazione e differenziale.</p>
+    </div>
+
+    <section id="sec-1" class="card">
+      <h2 class="section-title"><span class="pill">1</span> Derivata di una funzione</h2>
+      <div class="speech">$$f'(x_0)=\lim_{h\to 0}\frac{f(x_0+h)-f(x_0)}{h}.$$</div>
+      <table>
+        <tr><th>Idea</th><th>Significato</th></tr>
+        <tr><td>Rapporto incrementale</td><td>Misura la variazione media della funzione.</td></tr>
+        <tr><td>Limite</td><td>Trasforma la variazione media in variazione istantanea.</td></tr>
+        <tr><td>Interpretazione geometrica</td><td>Coefficiente angolare della tangente.</td></tr>
+        <tr><td>Interpretazione fisica</td><td>Velocità istantanea.</td></tr>
+      </table>
+    </section>
+
+    <section id="sec-2" class="card">
+      <h2 class="section-title"><span class="pill">2</span> Derivate fondamentali</h2>
+      <table>
+        <tr><th>Funzione</th><th>Derivata</th></tr>
+        <tr><td>$x^n$</td><td>$nx^{n-1}$</td></tr>
+        <tr><td>$e^x$</td><td>$e^x$</td></tr>
+        <tr><td>$\ln x$</td><td>$1/x$</td></tr>
+        <tr><td>$\sin x$</td><td>$\cos x$</td></tr>
+        <tr><td>$\cos x$</td><td>$-\sin x$</td></tr>
+        <tr><td>$\tan x$</td><td>$1/\cos^2 x$</td></tr>
+      </table>
+    </section>
+
+    <section id="sec-3" class="card">
+      <h2 class="section-title"><span class="pill">3</span> Operazioni con le derivate</h2>
+      <table>
+        <tr><th>Regola</th><th>Formula</th></tr>
+        <tr><td>Somma</td><td>$[f+g]'=f'+g'$</td></tr>
+        <tr><td>Prodotto</td><td>$[fg]'=f'g+fg'$</td></tr>
+        <tr><td>Quoziente</td><td>$\left[\frac fg\right]'=\frac{f'g-fg'}{g^2}$</td></tr>
+      </table>
+    </section>
+
+    <section id="sec-4" class="card">
+      <h2 class="section-title"><span class="pill">4</span> Funzione composta</h2>
+      <div class="speech">Se $y=f(g(x))$, allora $$y'=f'(g(x))\cdot g'(x).$$</div>
+    </section>
+
+    <section id="sec-5" class="card">
+      <h2 class="section-title"><span class="pill">5</span> Funzione inversa</h2>
+      <div class="speech">$$\left(f^{-1}\right)'(y_0)=\frac1{f'(x_0)}$$ con $y_0=f(x_0)$.</div>
+    </section>
+
+    <section id="sec-6" class="card">
+      <h2 class="section-title"><span class="pill">6</span> Derivate successive</h2>
+      <p>$f''(x)$ è la derivata della derivata e permette, per esempio, di studiare concavità e accelerazione.</p>
+    </section>
+
+    <section id="sec-7" class="card">
+      <h2 class="section-title"><span class="pill">7</span> Retta tangente</h2>
+      <div class="speech">$$y-f(x_0)=f'(x_0)(x-x_0).$$</div>
+    </section>
+
+    <section id="sec-8" class="card">
+      <h2 class="section-title"><span class="pill">8</span> Punti di non derivabilità</h2>
+      <table>
+        <tr><th>Tipo</th><th>Descrizione</th></tr>
+        <tr><td>Punto angoloso</td><td>Derivate laterali finite ma diverse.</td></tr>
+        <tr><td>Cuspide</td><td>Derivate laterali infinite con segno opposto.</td></tr>
+        <tr><td>Tangente verticale</td><td>Derivata infinita con stesso segno.</td></tr>
+        <tr><td>Non definita</td><td>La funzione non esiste nel punto.</td></tr>
+      </table>
+    </section>
+
+    <section id="sec-9" class="card">
+      <h2 class="section-title"><span class="pill">9</span> Velocità di variazione</h2>
+      <p>Se $s(t)$ è una legge oraria, allora $s'(t)$ rappresenta la velocità istantanea.</p>
+    </section>
+
+    <section id="sec-10" class="card">
+      <h2 class="section-title"><span class="pill">10</span> Differenziale</h2>
+      <div class="speech">$$dy=f'(x)\,dx.$$</div>
+    </section>
+  </main>
+</section>
+
+<section id="exerciseTab" class="layout exercise-layout">
+  <main>
+    <div class="hero">
+      <h1>Prove A e B - pagina 1038</h1>
+      <p>Le prove sono richiamabili dal menù verticale a destra. Ogni esercizio ha pulsanti per suggerimento, soluzione e svolgimento protetto.</p>
+      <div class="card" style="margin-top:14px;">
+        <h3 style="margin-top:0;">🔐 Sblocco generale degli svolgimenti</h3>
+        <p>Inserisci una sola volta la password per sbloccare tutti gli svolgimenti della pagina.</p>
+        <div class="input-row">
+          <input type="password" id="global-password" placeholder="Inserisci la password generale" />
+          <button class="action-btn unlock" type="button" onclick="unlockAllSteps()">Sblocca tutto</button>
+        </div>
+        <p id="global-unlock-msg" class="note"></p>
+      </div>
+    </div>
+    <div id="exerciseContainer"></div>
+  </main>
+
+  <aside class="side right">
+    <h3>📌 Menù prove</h3>
+    <button class="menu-btn" onclick="renderExam('A')" type="button">Prova A<small>seleziona gli esercizi della prova A</small></button>
+    <button class="menu-btn" onclick="renderExam('B')" type="button">Prova B<small>seleziona gli esercizi della prova B</small></button>
+  </aside>
+</section>
+
+<script>
+const examData = {"A": {"title": "Prova A", "intro": "Allenamento su definizione di derivata, derivate fondamentali, lettura del grafico e tangenti.", "exercises": [{"id": "A1", "title": "1. Derivata attraverso la definizione", "score": "/10", "text": "Calcola attraverso la definizione la derivata della funzione $f(x)=x^3-2x$ nel punto $x=2$.", "hint": "Scrivi il rapporto incrementale nel punto $x_0=2$: $$f'(2)=\\lim_{h\\to 0}\\frac{f(2+h)-f(2)}{h}.$$ Poi sviluppa $(2+h)^3$.", "solution": "Il risultato è $$f'(2)=10.$$ Infatti $f'(x)=3x^2-2$ e quindi $f'(2)=3\\cdot 4-2=10$.", "theory": "Definizione di derivata e significato del rapporto incrementale.", "steps": ["Calcola $f(2+h)$: $$f(2+h)=(2+h)^3-2(2+h)=8+12h+6h^2+h^3-4-2h=4+10h+6h^2+h^3.$$", "Calcola $f(2)$: $$f(2)=2^3-2\\cdot 2=8-4=4.$$", "Forma il rapporto incrementale: $$\\frac{f(2+h)-f(2)}{h}=\\frac{(4+10h+6h^2+h^3)-4}{h}=\\frac{10h+6h^2+h^3}{h}.$$", "Semplifica: $$\\frac{10h+6h^2+h^3}{h}=10+6h+h^2.$$", "Passa al limite: $$f'(2)=\\lim_{h\\to0}(10+6h+h^2)=10.$$"]}, {"id": "A2", "title": "2. Calcolo di derivate", "score": "/25", "text": "Calcola le derivate delle seguenti funzioni:<br>a) $y=-x^3+4x^2+x$<br>b) $y=\\dfrac{3}{x}$<br>c) $y=e^{x^2}$<br>d) $y=(\\ln x)^2$<br>e) $y=\\sqrt{x^2+1}$", "hint": "Riconosci subito la struttura: polinomio, reciproco, composta esponenziale, composta logaritmica, composta con radice.", "solution": "Le derivate sono:<br>a) $y'=-3x^2+8x+1$<br>b) $y'=-\\dfrac{3}{x^2}$<br>c) $y'=2xe^{x^2}$<br>d) $y'=\\dfrac{2\\ln x}{x}$<br>e) $y'=\\dfrac{x}{\\sqrt{x^2+1}}$", "theory": "Derivate fondamentali, somma e regola della catena.", "steps": ["a) Deriva termine per termine: $$(-x^3)'=-3x^2,\\quad (4x^2)'=8x,\\quad (x)'=1,$$ dunque $$y'=-3x^2+8x+1.$$", "b) Riscrivi: $$y=3x^{-1}.$$ Allora $$y'=3(-1)x^{-2}=-\\frac{3}{x^2}.$$", "c) È una composta: $$y=e^{x^2}.$$ Derivata dell'esterna: $e^{x^2}$; derivata dell'interna: $2x$. Quindi $$y'=2xe^{x^2}.$$", "d) È una composta: $$y=(\\ln x)^2.$$ Deriva l'esterna e moltiplica per la derivata di $\\ln x$: $$y'=2\\ln x\\cdot \\frac1x=\\frac{2\\ln x}{x}.$$", "e) Scrivi $$y=(x^2+1)^{1/2}.$$ Allora $$y'=\\frac12(x^2+1)^{-1/2}\\cdot 2x=\\frac{x}{\\sqrt{x^2+1}}.$$"]}, {"id": "A3", "title": "3. Lettura del grafico della funzione", "score": "/25", "text": "Osserva il grafico della funzione $f(x)$.<br>a) Individua gli zeri della funzione.<br>b) Indica le coordinate approssimate del massimo $V_1$ e del minimo $V_2$.<br>c) Stabilisci in quali intervalli la funzione è crescente e in quali è decrescente.<br>d) Deduci il segno di $f'(x)$ nei vari intervalli e indica i punti in cui $f'(x)=0$.", "image": "assets/esercizio3_provaA.png", "hint": "Dal grafico leggi prima i punti in cui la curva taglia l'asse $x$. Poi osserva dove la curva sale e dove scende. Nei punti di massimo e minimo la tangente è orizzontale, quindi la derivata vale zero.", "solution": "Dal grafico si leggono in modo approssimato:<br>• zeri in $x=0$, $x=4$, $x=6$;<br>• massimo locale $V_1\\approx(2,4)$;<br>• minimo locale $V_2\\approx(5,-1)$;<br>• funzione crescente per $x&lt;2$ e per $x&gt;5$;<br>• funzione decrescente per $2&lt;x&lt;5$.<br>Quindi:<br>$$f'(x)&gt;0 \\text{ per } x&lt;2 \\text{ e per } x&gt;5,$$ $$f'(x)&lt;0 \\text{ per } 2&lt;x&lt;5,$$ $$f'(2)=0, \\qquad f'(5)=0.$$", "theory": "Segno della derivata e lettura del grafico.", "steps": ["Gli zeri della funzione sono i punti in cui il grafico interseca l'asse $x$. Dal disegno si leggono: $$x=0,\\qquad x=4,\\qquad x=6.$$", "Il punto $V_1$ è il massimo locale. Dal grafico si legge circa: $$V_1\\approx(2,4).$$", "Il punto $V_2$ è il minimo locale. Dal grafico si legge circa: $$V_2\\approx(5,-1).$$", "Osserva dove la curva sale e dove scende: per $x&lt;2$ la funzione cresce; tra $2$ e $5$ la funzione decresce; per $x&gt;5$ torna a crescere.", "Quando la funzione è crescente, la derivata è positiva: $$f'(x)&gt;0 \\quad \\text{per } x&lt;2 \\text{ e per } x&gt;5.$$", "Quando la funzione è decrescente, la derivata è negativa: $$f'(x)&lt;0 \\quad \\text{per } 2&lt;x&lt;5.$$ Nei punti di massimo e minimo la tangente è orizzontale, quindi: $$f'(2)=0,\\qquad f'(5)=0.$$"]}, {"id": "A4", "title": "4. Retta tangente alla curva $y=3x^4$", "score": "/20", "text": "Data la curva di equazione $y=3x^4$, determina l’equazione della retta tangente nel suo punto di ascissa $1$ e stabilisci se ci sono dei punti della curva con tangente parallela alla precedente.", "hint": "Trova prima il coefficiente angolare della tangente in $x=1$. Poi cerca dove la derivata assume lo stesso valore.", "solution": "La derivata è $$y'=12x^3.$$ In $x=1$ il coefficiente angolare è $m=12$ e il punto è $(1,3)$. Quindi la tangente è $$y-3=12(x-1),$$ cioè $$y=12x-9.$$ Le tangenti parallele hanno lo stesso coefficiente angolare, quindi risolvi $$12x^3=12 \\Rightarrow x^3=1 \\Rightarrow x=1.$$ Non ci sono altri punti reali diversi da $x=1$.", "theory": "Retta tangente e tangenti parallele.", "steps": ["Deriva: $$y=3x^4 \\Rightarrow y'=12x^3.$$", "Nel punto di ascissa $1$: $$m=f'(1)=12,$$ e $$f(1)=3.$$", "Scrivi la tangente: $$y-3=12(x-1).$$", "Riduci in forma esplicita: $$y=12x-12+3=12x-9.$$", "Per trovare altre tangenti parallele imponi lo stesso coefficiente angolare: $$12x^3=12.$$", "Ottieni $$x^3=1 \\Rightarrow x=1.$$ Quindi non ci sono altri punti reali con tangente parallela."]}, {"id": "A5", "title": "5. Determinazione dei parametri", "score": "/20", "text": "Determina $a$ e $b$ in modo che il grafico della funzione $f(x)=ax^4+x^3+bx$ abbia per tangente la retta di equazione $y=4x-5$ nel punto di ascissa $1$.", "hint": "La retta tangente deve passare per il punto del grafico con $x=1$ e deve avere lo stesso coefficiente angolare. Quindi imposta $$f(1)=-1, \\qquad f'(1)=4.$$", "solution": "Si ottiene il sistema $$a+b=-2,$$ $$4a+b=1.$$ Sottraendo: $$3a=3 \\Rightarrow a=1,$$ e poi $$b=-3.$$ Quindi $$a=1, \\qquad b=-3.$$", "theory": "Tangente assegnata: stesso punto e stessa pendenza.", "steps": ["La retta tangente è $$y=4x-5.$$ Nel punto di ascissa $1$ la sua ordinata vale $$y=4\\cdot 1-5=-1.$$ Quindi deve essere $$f(1)=-1.$$", "Calcola $f(1)$: $$f(1)=a\\cdot 1^4+1^3+b\\cdot 1=a+1+b.$$ Allora $$a+1+b=-1 \\Rightarrow a+b=-2.$$", "Ora calcola la derivata: $$f'(x)=4ax^3+3x^2+b.$$", "Imponi lo stesso coefficiente angolare della retta, cioè $4$: $$f'(1)=4a+3+b=4 \\Rightarrow 4a+b=1.$$", "Risolvi il sistema: $$\\begin{cases} a+b=-2 \\\\ 4a+b=1 \\end{cases}$$", "Sottraendo la prima dalla seconda: $$3a=3 \\Rightarrow a=1.$$", "Sostituisci: $$1+b=-2 \\Rightarrow b=-3.$$"]}]}, "B": {"title": "Prova B", "intro": "Allenamento su tangente, legge oraria, regole di derivazione e problemi sintetici.", "exercises": [{"id": "B1", "title": "1. Tangente alla curva $y=e^{x+1}$", "score": "/20", "text": "Determina l'equazione della retta tangente alla curva $y=e^{x+1}$ nel suo punto di intersezione con l’asse $y$.", "hint": "Il punto di intersezione con l'asse $y$ si trova ponendo $x=0$.", "solution": "Nel punto di intersezione con l'asse $y$ si ha $x=0$ e quindi $$y=e^{0+1}=e.$$ La derivata è $$y'=e^{x+1},$$ quindi il coefficiente angolare nel punto è $m=e$. La tangente è $$y-e=e(x-0),$$ cioè $$y=ex+e.$$", "theory": "Derivata dell'esponenziale composta e formula della tangente.", "steps": ["Intersezione con l'asse $y$ significa $x=0$.", "Calcola il punto: $$f(0)=e^{1}=e.$$ Quindi il punto è $(0,e)$.", "Deriva: $$f'(x)=e^{x+1}.$$", "Calcola il coefficiente angolare nel punto: $$m=f'(0)=e.$$", "Scrivi la retta tangente: $$y-e=e(x-0),$$ quindi $$y=ex+e.$$"]}, {"id": "B2", "title": "2. Legge oraria, velocità e accelerazione", "score": "/20", "text": "La legge oraria del moto di un corpo è $$s(t)=t^4-3t^3+8t+5,$$ dove il tempo è espresso in secondi e la posizione in metri.<br>a) Determina la velocità e l'accelerazione in funzione del tempo.<br>b) In quale istante la velocità istantanea è $3\\,\\text{m/s}$?", "hint": "Ricorda: $$v(t)=s'(t), \\qquad a(t)=s''(t).$$", "solution": "Si ha $$v(t)=4t^3-9t^2+8,$$ $$a(t)=12t^2-18t.$$ Per $v(t)=3$: $$4t^3-9t^2+8=3 \\Rightarrow 4t^3-9t^2+5=0.$$ Un valore semplice è $t=1$, infatti $$4-9+5=0.$$", "theory": "Derivata come velocità istantanea e seconda derivata come accelerazione.", "steps": ["Deriva la posizione: $$s(t)=t^4-3t^3+8t+5$$ quindi $$v(t)=s'(t)=4t^3-9t^2+8.$$", "Deriva ancora: $$a(t)=v'(t)=12t^2-18t.$$", "Imponi la condizione richiesta: $$v(t)=3.$$", "Ottieni l'equazione: $$4t^3-9t^2+8=3 \\Rightarrow 4t^3-9t^2+5=0.$$", "Prova $t=1$: $$4-9+5=0,$$ quindi $t=1$ è soluzione."]}, {"id": "B3", "title": "3. Calcolo di derivate", "score": "/20", "text": "Calcola le derivate delle seguenti funzioni:<br>a) $y=\\dfrac{4x^3+x}{1+2x^2}$<br>b) $y=2\\sqrt{1-x}$<br>c) $y=\\dfrac{1+\\cos x}{\\cos x}$<br>d) $y=x\\ln x$", "hint": "Qui compaiono: quoziente, radice composta, espressione trigonometrica da semplificare, prodotto.", "solution": "Una possibile forma finale è:<br>a) $$y'=\\frac{(12x^2+1)(1+2x^2)-(4x^3+x)(4x)}{(1+2x^2)^2}$$<br>b) $$y'=-\\frac{1}{\\sqrt{1-x}}$$<br>c) $$y'=\\frac{\\sin x}{\\cos^2 x}$$<br>d) $$y'=\\ln x+1$$", "theory": "Quoziente, catena, semplificazione algebrica e prodotto.", "steps": ["a) Applica la regola del quoziente: $$y=\\frac{N}{D}, \\quad N=4x^3+x, \\ D=1+2x^2.$$ Allora $$N'=12x^2+1, \\quad D'=4x,$$ e $$y'=\\frac{N'D-ND'}{D^2}.$$", "b) Scrivi $$y=2(1-x)^{1/2}.$$ Allora $$y'=2\\cdot \\frac12(1-x)^{-1/2}\\cdot(-1)=-(1-x)^{-1/2}=-\\frac1{\\sqrt{1-x}}.$$", "c) Prima semplifica: $$\\frac{1+\\cos x}{\\cos x}=\\sec x+1.$$ Oppure applica il quoziente: $$y'=\\frac{(-\\sin x)\\cos x-(1+\\cos x)(-\\sin x)}{\\cos^2 x}=\\frac{\\sin x}{\\cos^2 x}.$$", "d) Prodotto: $$y=x\\ln x,$$ quindi $$y'=1\\cdot \\ln x + x\\cdot \\frac1x=\\ln x+1.$$"]}, {"id": "B4", "title": "4. Parametri con tangente assegnata", "score": "/20", "text": "Trova i parametri di una funzione polinomiale del tipo $$f(x)=ax^2+bx+c$$ sapendo che la retta $$y=2x+1$$ è tangente al grafico nel punto di ascissa $1$ e che il grafico passa per l'origine.", "hint": "Usa tre condizioni: $$f(0)=0, \\qquad f(1)=3, \\qquad f'(1)=2.$$", "solution": "Dalla condizione di passaggio per l'origine: $$c=0.$$ Dalla tangenza nel punto di ascissa $1$: $$f(1)=a+b+c=3,$$ $$f'(x)=2ax+b \\Rightarrow f'(1)=2a+b=2.$$ Con $c=0$ ottieni: $$\\begin{cases} a+b=3 \\\\ 2a+b=2 \\end{cases}$$ quindi $$a=-1,\\quad b=4,\\quad c=0.$$", "theory": "Stesso punto, stessa pendenza e condizione aggiuntiva.", "steps": ["Passaggio per l'origine: $$f(0)=0 \\Rightarrow c=0.$$", "La retta tangente è $y=2x+1$. Nel punto di ascissa $1$ la sua ordinata vale: $$y=2\\cdot 1+1=3.$$ Quindi $$f(1)=3.$$", "Calcola: $$f(1)=a+b+c=a+b=3.$$", "Deriva la funzione: $$f'(x)=2ax+b.$$", "La tangente ha coefficiente angolare $2$, quindi $$f'(1)=2a+b=2.$$", "Risolvi il sistema: $$\\begin{cases} a+b=3 \\\\ 2a+b=2 \\end{cases}$$ Sottraendo: $$a=-1.$$", "Sostituisci: $$-1+b=3 \\Rightarrow b=4,$$ e con prima $$c=0.$$"]}, {"id": "B5", "title": "5. Mini-problema di verifica finale", "score": "/20", "text": "Per la funzione $$f(x)=x^2e^x$$<br>a) calcola la derivata;<br>b) scrivi l’equazione della tangente nel punto di ascissa $0$.", "hint": "Per la derivata usa il prodotto tra $x^2$ ed $e^x$.", "solution": "a) $$f'(x)=2xe^x+x^2e^x=e^x(x^2+2x).$$<br>b) Nel punto $x=0$ si ha: $$f(0)=0, \\qquad f'(0)=0.$$ Quindi la tangente è $$y=0.$$", "theory": "Prodotto e tangente.", "steps": ["Applica la regola del prodotto: $$f'(x)=(x^2)'e^x+x^2(e^x)'=2xe^x+x^2e^x.$$", "Metti in evidenza: $$f'(x)=e^x(x^2+2x).$$", "Nel punto di ascissa $0$: $$f(0)=0^2e^0=0.$$", "Calcola la pendenza: $$f'(0)=e^0(0+0)=0.$$", "La tangente nel punto $(0,0)$ è $$y-0=0(x-0),$$ cioè $$y=0.$$"]}]}};
+document.querySelectorAll('.menu-btn[data-scroll]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const el = document.querySelector(btn.dataset.scroll);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.layout').forEach(l => l.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    if (window.MathJax) MathJax.typesetPromise();
+  });
+});
+
+let currentExam = 'A';
+let allUnlocked = false;
+const state = {};
+
+function makeExerciseCard(ex){
+  const img = ex.image ? `<img class="exercise-image" src="${ex.image}" alt="Immagine esercizio">` : '';
+  return `
+  <article class="exercise-card" id="${ex.id}">
+    <div class="exercise-header">
+      <h2 class="exercise-title">${ex.title}</h2>
+      <div class="score-badge">${ex.score}</div>
+    </div>
+    <div class="quote">${ex.text}</div>
+    ${img}
+    <div class="btn-row">
+      <button class="action-btn hint" type="button" onclick="togglePanel('${ex.id}','hint')">💡 Suggerimento</button>
+      <button class="action-btn solution" type="button" onclick="togglePanel('${ex.id}','solution')">✅ Soluzione</button>
+      <button class="action-btn unlock" type="button" onclick="togglePanel('${ex.id}','unlock')">🔐 Svolgimento protetto</button>
+    </div>
+    <div id="${ex.id}-hint" class="hidden-panel card" style="margin:10px 0 0;">${ex.hint}</div>
+    <div id="${ex.id}-solution" class="hidden-panel card" style="margin:10px 0 0;">
+      <h3 style="margin-top:0;">Soluzione rapida</h3>
+      <div>${ex.solution}</div>
+      <p><strong>Approfondimento teorico collegato:</strong> ${ex.theory}</p>
+    </div>
+    <div id="${ex.id}-unlock" class="hidden-panel card" style="margin:10px 0 0;">
+      <h3 style="margin-top:0;">Svolgimento guidato</h3>
+      <p id="${ex.id}-msg" class="note">Per vedere lo svolgimento, sblocca una sola volta la pagina usando la password generale in alto.</p>
+      <div id="${ex.id}-stepsArea" style="display:none;">
+        <div class="step-box">
+          <div id="${ex.id}-stepContent"></div>
+          <div class="step-progress" id="${ex.id}-progress"></div>
+          <div class="step-controls">
+            <button type="button" onclick="nextStep('${ex.id}')">Avanti ➜</button>
+            <button type="button" onclick="nextStep('${ex.id}')">Ho capito 👍</button>
+            <button type="button" onclick="resetSteps('${ex.id}')">Ricomincia ↺</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderExam(examKey){
+  currentExam = examKey;
+  const exam = examData[examKey];
+  const box = document.getElementById('exerciseContainer');
+  box.innerHTML =
+    `<section class="card"><h2 class="section-title"><span class="pill">${exam.title}</span> ${exam.intro}</h2></section>` +
+    exam.exercises.map(makeExerciseCard).join('');
+
+  exam.exercises.forEach(ex => {
+    if (!state[ex.id]) state[ex.id] = { index: 0, steps: ex.steps };
+  });
+
+  if (allUnlocked){
+    exam.exercises.forEach(ex => {
+      const area = document.getElementById(`${ex.id}-stepsArea`);
+      const msg = document.getElementById(`${ex.id}-msg`);
+      if (area) area.style.display = 'block';
+      if (msg){
+        msg.textContent = 'Svolgimento sbloccato.';
+        msg.style.color = '#027a48';
+      }
+    });
+  }
+
+  if (window.MathJax) MathJax.typesetPromise([box]);
+}
+
+function togglePanel(id, kind){
+  const panel = document.getElementById(`${id}-${kind}`);
+  if (!panel) return;
+  panel.classList.toggle('visible');
+  if (kind === 'unlock'){
+    const area = document.getElementById(`${id}-stepsArea`);
+    if (allUnlocked && area){
+      area.style.display = 'block';
+      updateStep(id);
+    }
+  }
+  if (window.MathJax) MathJax.typesetPromise([panel]);
+}
+
+async function readPassword(){
+  try {
+    const res = await fetch('password_derivate.txt');
+    if (res.ok){
+      const txt = (await res.text()).trim();
+      if (txt) return txt;
+    }
+  } catch (e) {}
+  return 'derivatasegreta2026';
+}
+
+async function unlockAllSteps(){
+  const pwd = document.getElementById('global-password').value.trim();
+  const msg = document.getElementById('global-unlock-msg');
+  const truePwd = await readPassword();
+
+  if (pwd !== truePwd){
+    msg.textContent = 'Password non corretta. Riprova.';
+    msg.style.color = '#b42318';
+    return;
+  }
+
+  allUnlocked = true;
+  msg.textContent = 'Password corretta! Tutti gli svolgimenti sono sbloccati.';
+  msg.style.color = '#027a48';
+
+  const exam = examData[currentExam];
+  exam.exercises.forEach(ex => {
+    const area = document.getElementById(`${ex.id}-stepsArea`);
+    const emsg = document.getElementById(`${ex.id}-msg`);
+    if (area) area.style.display = 'block';
+    if (emsg){
+      emsg.textContent = 'Svolgimento sbloccato.';
+      emsg.style.color = '#027a48';
+    }
+  });
+}
+
+function ensureUnlocked(id){
+  const msg = document.getElementById(`${id}-msg`);
+  if (!allUnlocked){
+    if (msg){
+      msg.textContent = 'Per vedere lo svolgimento, sblocca prima la pagina con la password generale in alto.';
+      msg.style.color = '#b42318';
+    }
+    return false;
+  }
+  return true;
+}
+
+function updateStep(id){
+  const st = state[id];
+  if (!st || !ensureUnlocked(id)) return;
+  const box = document.getElementById(`${id}-stepContent`);
+  const visibleSteps = st.steps.slice(0, st.index + 1);
+  box.innerHTML = visibleSteps.map((s, i) =>
+    `<div class="step-item ${i === st.index ? 'current' : ''}"><strong>Passaggio ${i+1}</strong><br>${s}</div>`
+  ).join('');
+  document.getElementById(`${id}-progress`).textContent = `Passaggio ${st.index+1} di ${st.steps.length}`;
+  const area = document.getElementById(`${id}-stepsArea`);
+  if (area) area.style.display = 'block';
+  if (window.MathJax) MathJax.typesetPromise([box]);
+}
+
+function nextStep(id){
+  const st = state[id];
+  if (!st || !ensureUnlocked(id)) return;
+  if (st.index < st.steps.length - 1) st.index += 1;
+  updateStep(id);
+}
+
+function resetSteps(id){
+  const st = state[id];
+  if (!st || !ensureUnlocked(id)) return;
+  st.index = 0;
+  updateStep(id);
+}
+
+renderExam('A');
+if (window.MathJax) MathJax.typesetPromise();
+</script>
+</body>
+</html>
